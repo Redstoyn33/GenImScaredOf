@@ -1,21 +1,18 @@
 package timox0.bedrockgen;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.World;
 import org.bukkit.generator.ChunkGenerator;
 import org.bukkit.generator.WorldInfo;
-import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.noise.PerlinNoiseGenerator;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class  CustomWorldGenerator extends ChunkGenerator {
+public class BedrokInverse extends ChunkGenerator {
 
-    public CustomWorldGenerator() {
+    public BedrokInverse() {
         noise = new PerlinNoiseGenerator(new Random().nextLong());
     }
 
@@ -40,15 +37,15 @@ public class  CustomWorldGenerator extends ChunkGenerator {
                 int globalZ = chunkZ * 16 + z;
 
                 for (int y = 0; y < 256; y++) {
-                    chunkData.setBlock(x, y, z, Material.BEDROCK);
+                    chunkData.setBlock(x, y, z, Material.AIR);
 
                     double noiseValue = noise.noise(globalX * NOISE_FREQUENCY, y * NOISE_FREQUENCY, globalZ * NOISE_FREQUENCY);
 
                     // Check if the current position should be a cave
                     if (noiseValue > CAVE_DENSITY && Math.pow(x - 8, 2) + Math.pow(z - 8, 2) <= Math.pow(CAVE_RADIUS, 2)) {
                         // Set the block to air
-                        chunkData.setBlock(x, y, z, Material.AIR);
-                    } else if (y > 0 && chunkData.getType(x, y - 1, z) == Material.AIR) {
+                        chunkData.setBlock(x, y, z, Material.BEDROCK);
+                    } else if (y > 0 && chunkData.getType(x, y - 1, z) == Material.BEDROCK) {
                         // Interpolate between cave and solid ground
                         double interpolationFactor = (noiseValue - CAVE_DENSITY) / (1.0 - CAVE_DENSITY);
                         int groundHeight = findGroundHeight(chunkData, x, y, z);
@@ -56,7 +53,7 @@ public class  CustomWorldGenerator extends ChunkGenerator {
                             double blend = interpolate(groundHeight - y, 0, groundHeight, 0, 1);
                             double smoothInterpolation = smoothstep(blend);
                             if (interpolationFactor > smoothInterpolation) {
-                                chunkData.setBlock(x, y, z, Material.AIR);
+                                chunkData.setBlock(x, y, z, Material.BEDROCK);
                             }
                         }
                     }
@@ -73,7 +70,7 @@ public class  CustomWorldGenerator extends ChunkGenerator {
 
                             // Set the block to air if it's within the radius of the worm
                             if (Math.pow(dx, 2) + Math.pow(dy, 2) + Math.pow(dz, 2) <= Math.pow(wormRadius, 2)) {
-                                chunkData.setBlock(x + i, y - i, z + i, Material.AIR);
+                                chunkData.setBlock(x + i, y - i, z + i, Material.BEDROCK);
                             }
                         }
                     }
@@ -99,7 +96,7 @@ public class  CustomWorldGenerator extends ChunkGenerator {
             for (int x = a == 0 ? posX : 0; x < (a == 0 ? 16 : posX + boxSize);x++ ){
                 for (int z = b == 0 ? posZ : 0; z < (b == 0 ? 16 : posZ + boxSize);z++ ){
                     for (int y = posY; y < (posY+boxSize); y++ ){
-                        chunkData.setBlock(x,y,z, Material.AIR);
+                        chunkData.setBlock(x,y,z, Material.BEDROCK);
                     }
                 }
             }
@@ -125,7 +122,7 @@ public class  CustomWorldGenerator extends ChunkGenerator {
                 for (int x = posX; x < (posX + boxSize); x++) {
                     for (int y = posY; y < (posY + boxSize); y++) {
                         for (int z = posZ; z < (posZ + boxSize); z++) {
-                            chunkData.setBlock(x, y, z, Material.AIR);
+                            chunkData.setBlock(x, y, z, Material.BEDROCK);
                         }
                     }
                 }
@@ -158,10 +155,10 @@ public class  CustomWorldGenerator extends ChunkGenerator {
         for (int x = 0; x < 16; x++) {
             for (int z = 0; z < 16; z++) {
                 for (int y = 255; y < worldInfo.getMaxHeight(); y++) {
-                    chunkData.setBlock(x, y, z, Material.BEDROCK);
+                    chunkData.setBlock(x, y, z, Material.AIR);
                 }
                 for (int y = 0; y > worldInfo.getMinHeight(); y--) {
-                    chunkData.setBlock(x, y, z, Material.BEDROCK);
+                    chunkData.setBlock(x, y, z, Material.AIR);
                 }
             }
         }
@@ -169,7 +166,7 @@ public class  CustomWorldGenerator extends ChunkGenerator {
 
     private int findGroundHeight(ChunkData chunkData, int x, int y, int z) {
         for (int i = y; i >= 0; i--) {
-            if (chunkData.getType(x, i, z) != Material.AIR) {
+            if (chunkData.getType(x, i, z) != Material.BEDROCK) {
                 return i;
             }
         }

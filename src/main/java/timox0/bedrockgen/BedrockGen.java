@@ -16,9 +16,6 @@ public final class BedrockGen extends JavaPlugin {
     public void onEnable() {
         // Plugin startup logic
         plugin = this;
-        getServer().getPluginManager().registerEvents(new SelectionListener(), this);
-        this.getCommand("saveBebra").setExecutor(new Command());
-        this.getCommand("loadBebra").setExecutor(new Command2());
     }
 
     @Override
@@ -28,9 +25,6 @@ public final class BedrockGen extends JavaPlugin {
 
     @Override
     public ChunkGenerator getDefaultWorldGenerator(String worldName, String id) {
-        getLogger().log(Level.WARNING, "CustomChunkGenerator is used!");
-        PerlinNoiseGenerator noiseGenerator = new PerlinNoiseGenerator(new Random().nextLong());
-        StructureGenerator structureGenerator = new StructureGenerator();
-        return new CustomWorldGenerator(noiseGenerator, structureGenerator); // Return an instance of the chunk generator we want to use.
+        return new TrueGeneration();
     }
 }

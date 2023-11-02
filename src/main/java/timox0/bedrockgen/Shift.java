@@ -1,21 +1,18 @@
 package timox0.bedrockgen;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.World;
 import org.bukkit.generator.ChunkGenerator;
 import org.bukkit.generator.WorldInfo;
-import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.noise.PerlinNoiseGenerator;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class  CustomWorldGenerator extends ChunkGenerator {
+public class Shift extends ChunkGenerator {
 
-    public CustomWorldGenerator() {
+    public Shift() {
         noise = new PerlinNoiseGenerator(new Random().nextLong());
     }
 
